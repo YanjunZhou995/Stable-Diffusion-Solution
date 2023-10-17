@@ -15,6 +15,13 @@ KSA_NAME=k8s-sa
 APP_SA_NAME=stable-diffusion-demo-sa
 ```
 2. Run deploy.sh, manually run is recommended for customizing your parameters and verifying each step.  
+3. Upload model file to GCS bucket in folder "model2". If you use another folder name, remember to modify the "- only-dir" in gcs-pv.yaml
+```
+  mountOptions:
+    - implicit-dirs
+    - only-dir=model2
+```
+
 
 
 
