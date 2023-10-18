@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sd15-deployment2
+  labels:
+    app: stable-diffusion-sd15
+    model: model2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stable-diffusion-sd15
+      model: model2
+  template:
+    metadata:
+      labels:
+        app: stable-diffusion-sd15
+        model: model2
+      annotations:
+        gke-gcsfuse/volumes: "true"
+        gke-gcsfuse/cpu-limit: 500m
+        gke-gcsfuse/memory-limit: 100Mi
+        gke-gcsfuse/ephemeral-storage-limit: 5Gi
+    spec:
+      containers:
+      - name: stable-diffusion-webui
+        image: us-central1-docker.pkg.dev/tidal-memento-371114/c76e27a2-stable-diffusion-repository/sd-webui:tf
+        resources:
+          limits:
+            cpu: 2500m
+            memory: 11Gi
+            nvidia.com/gpu: "1"
+          requests:
+            cpu: 2500m
+            memory: 11Gi
+            nvidia.com/gpu: "1"
+        volumeMounts:
+        - name: gcs-fuse-csi-static
+          mountPath: "/stable-diffusion-webui/models/Stable-diffusion" # pay attention
+        ports:
+          - containerPort: 7860
+      nodeSelector:
+        model: model2
+      serviceAccountName: k8s-sa # pay attention
+      volumes:
+      - name: gcs-fuse-csi-static
+        persistentVolumeClaim:
+          claimName: gcs-fuse-csi-static-pvc-2
+
+
+
+
+# todo: volumeMounts:
+#       nodeSelector:
+#        cloud.google.com/gke-gpu-sharing-strategy: time-sharing
+#        cloud.google.com/gke-max-shared-clients-per-gpu: "2"
