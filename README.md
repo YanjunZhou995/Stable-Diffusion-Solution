@@ -46,7 +46,7 @@ kubectl apply -f sd15-deployment1.yaml
 ```
 kubectl apply -f gcs-pv-2.yaml
 kubectl apply -f gcs-pvc-2.yaml
-kubectl apply -f sd15-deployment2.yaml
+kubectl apply -f sd15-deployment2-dynamic.yaml
 ```
 In container terminal, verify the model file in gcs is mounted in the correct path.
 ```
@@ -57,7 +57,7 @@ create a fixed existing pod in on-demand node pool.
 ```
 kubectl apply -f sd15-deplyment2-static.yaml
 ```
-only allow autoscaling of sd15-deployment2 based on GPU duty cycle.
+only allow autoscaling of sd15-deployment2-dynamic based on GPU duty cycle.
 ```
 kubectl create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user "$(gcloud config get-value account)"
 kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/k8s-stackdriver/master/custom-metrics-stackdriver-adapter/deploy/production/adapter_new_resource_model.yaml
@@ -116,8 +116,8 @@ gcloud compute firewall-rules create proxy-connection \
 ```
 apply service and ingress.
 ```
-kubectl apply -f service-2.yaml
-kubectl apply -f internal-ingress.yaml
+kubectl apply -f service-2-internal-lb.yaml
+kubectl apply -f internal-ingress-2.yaml
 ```
 verify the ingress is created, need to wait few minutes.
 ```
