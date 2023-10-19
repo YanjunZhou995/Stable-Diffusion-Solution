@@ -13,6 +13,7 @@ MACHINE_TYPE=g2-standard-4 \
 DISK_SIZE="100" \
 BUCKET_NAME=<sd-model-bucket> \
 BUCKET_LOCATION=<US> \
+KSA_ROLE=roles/storage.objectAdmin \
 KSA_NAME=k8s-sa \
 APP_SA_NAME=stable-diffusion-sa
 ```
