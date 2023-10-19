@@ -6,14 +6,14 @@ spec:
   accessModes:
   - ReadWriteMany
   capacity:
-    storage: 5Gi # can be customized
+    storage: $5Gi # can be customized
   storageClassName: example-storage-class
   claimRef:
     namespace: default
     name: gcs-fuse-csi-static-pvc-2
   mountOptions:
     - implicit-dirs
-    - only-dir=model2
+    - only-dir=$model2
   csi:
     driver: gcsfuse.csi.storage.gke.io
-    volumeHandle: sd-model-bucket
+    volumeHandle: $sd-model-bucket # must be changed

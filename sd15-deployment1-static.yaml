@@ -18,13 +18,13 @@ spec:
         model: model1
       annotations:
         gke-gcsfuse/volumes: "true"
-        gke-gcsfuse/cpu-limit: 500m
-        gke-gcsfuse/memory-limit: 100Mi
-        gke-gcsfuse/ephemeral-storage-limit: 5Gi
+        gke-gcsfuse/cpu-limit: $500m
+        gke-gcsfuse/memory-limit: $100Mi
+        gke-gcsfuse/ephemeral-storage-limit: $5Gi
     spec:
       containers:
       - name: stable-diffusion-webui
-        image: us-central1-docker.pkg.dev/tidal-memento-371114/c76e27a2-stable-diffusion-repository/sd-webui:tf
+        image: $IMAGE
         resources:
           limits:
             cpu: "3"
@@ -42,7 +42,7 @@ spec:
       nodeSelector:
         instance-type: ondemand
         model: model1
-      serviceAccountName: k8s-sa # pay attention
+      serviceAccountName: $k8s-sa # pay attention
       volumes:
       - name: gcs-fuse-csi-static
         persistentVolumeClaim:

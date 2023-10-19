@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sd15-deployment2-static
+  name: sd15-deployment1-dynamic
   labels:
     app: stable-diffusion-sd15
-    model: model2
+    model: model1
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: stable-diffusion-sd15
-      model: model2
+      model: model1
   template:
     metadata:
       labels:
         app: stable-diffusion-sd15
-        model: model2
+        model: model1
       annotations:
         gke-gcsfuse/volumes: "true"
         gke-gcsfuse/cpu-limit: $500m
@@ -27,8 +27,8 @@ spec:
         image: $IMAGE
         resources:
           limits:
-            cpu: "3"
-            memory: 12Gi
+            cpu: 2500m
+            memory: 11Gi
             nvidia.com/gpu: "1"
           requests:
             cpu: 2500m
@@ -40,13 +40,14 @@ spec:
         ports:
           - containerPort: 7860
       nodeSelector:
-        instance-type: ondemand
-        model: model2
+        model: model1
       serviceAccountName: $k8s-sa # pay attention
       volumes:
       - name: gcs-fuse-csi-static
         persistentVolumeClaim:
-          claimName: gcs-fuse-csi-static-pvc-2
+          claimName: gcs-fuse-csi-static-pvc-1
+
+
 
 
 # todo: volumeMounts:
