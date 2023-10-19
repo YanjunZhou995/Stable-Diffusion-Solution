@@ -37,35 +37,41 @@ gcloud builds submit --machine-type=e2-highcpu-32 --disk-size=100 --region=${REG
     - implicit-dirs
     - only-dir=model2
 ```
-5. Configure GCS FUSE with cluster.
-Modify gcs-pv, gcs-pvc, sd15-deployment yaml files.
+5. Configure GCS FUSE in cluster. \
+Modify gcs-pv, gcs-pvc, sd15-deployment yaml files. \
 Apply gcs fuse.
 ```
 kubectl apply -f gcs-pv-1.yaml
 kubectl apply -f gcs-pvc-1.yaml
-kubectl apply -f sd15-deployment1.yaml
 ```
 ```
 kubectl apply -f gcs-pv-2.yaml
 kubectl apply -f gcs-pvc-2.yaml
-kubectl apply -f sd15-deployment2-dynamic.yaml
+```
+create a fixed existing pod in on-demand node pool.
+```
+kubectl apply -f sd15-deplyment1-static.yaml
+kubectl apply -f sd15-deplyment2-static.yaml
 ```
 In container terminal, verify the model file in gcs is mounted in the correct path.
 ```
+kubectl get pod
 kubectl exec --stdin --tty $POD_NAME -c stable-diffusion-webui -- /bin/bash
 ```
-6. Configure Horizontal Pod Autoscaling.
-create a fixed existing pod in on-demand node pool.
+6. Configure Horizontal Pod Autoscaling. \
+create dynamic deployment, dynamic deployment can be on either on-demand node pool or spot node pool.
 ```
-kubectl apply -f sd15-deplyment2-static.yaml
+kubectl apply -f sd15-deployment1-dynamic.yaml
+kubectl apply -f sd15-deployment2-dynamic.yaml
 ```
-only allow autoscaling of sd15-deployment2-dynamic based on GPU duty cycle.
+only allow autoscaling of sd15-deployment2-dynamic based on GPU duty cycle. \
+The Horizontal Pod Autoscaler changes the shape of your Kubernetes workload by automatically increasing or decreasing the number of Pods in response to the workload's CPU or memory consumption, or in response to custom metrics reported from within Kubernetes or external metrics from sources outside of your cluster. Install the stackdriver adapter to enable the stable-diffusion deployment scale with GPU usage metrics.
 ```
 kubectl create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user "$(gcloud config get-value account)"
 kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/k8s-stackdriver/master/custom-metrics-stackdriver-adapter/deploy/production/adapter_new_resource_model.yaml
 ```
 
-give monitoring viewer role to app sa.
+give monitoring viewer role to App SA.
 ```
 gcloud projects add-iam-policy-binding \
     $PROJECT_ID \
@@ -84,14 +90,14 @@ apply hpa.
 kubectl apply -f hpa-1.yaml
 kubectl apply -f hpa-2.yaml
 ```
-7. Configure load balancer for cluster.
+7. Configure load balancer for cluster. \
 create external load balancer if needed.
 ```
 kubectl apply -f service-1-external-lb.yaml
 kubectl apply -f service-2-external-lb.yaml
 ```
 
-create internal load balancer if needed.
+create internal load balancer if needed. \
 create subnet for proxy.
 ```
 gcloud compute networks subnets create proxy-subnet \
