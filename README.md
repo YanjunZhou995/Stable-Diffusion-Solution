@@ -1,4 +1,6 @@
 # Stable-Diffusion-Solution
+<img width="2550" alt="image" src="https://github.com/YanjunZhou995/Stable-Diffusion-Solution/assets/87971537/2de784c3-f6e7-4c23-aed7-6c4580c2e2fa">
+
 1. Modify parameters in deploy.sh
 ```
 PROJECT_ID=<project id> \
