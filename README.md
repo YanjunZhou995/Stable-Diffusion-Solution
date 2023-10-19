@@ -123,9 +123,3 @@ verify the ingress is created, need to wait few minutes.
 ```
 kubectl get ingress
 ```
-
-
-
-
-
-
