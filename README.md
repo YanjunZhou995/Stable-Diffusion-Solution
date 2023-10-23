@@ -5,20 +5,18 @@
 
 1. Modify parameters in deploy.sh
 ```
-PROJECT_ID=<project id> \
-BUILD_REGIST=<sd-repo name> \
-CLUSTER_NAME=<the name of your new cluster> \
-SA_NAME="<service account>" \
-REGION=<the desired region for your cluster, such as us-central1> \
-ZONE=<the desired zone for your node pool, such as us-central1-a> \
-NETWORK=default \
-MAX_NODES=8 \
-MACHINE_TYPE=g2-standard-4 \
-DISK_SIZE="100" \
-BUCKET_NAME=<sd-model-bucket> \
-BUCKET_LOCATION=<US> \
-KSA_ROLE=roles/storage.objectAdmin \
-KSA_NAME=k8s-sa \
+PROJECT_ID=<your project id>
+CLUSTER_NAME=stable-diffusion-cluster
+REGION=us-central1
+ZONE=(us-central1-a us-central1-b us-central1-c)
+NETWORK=default 
+MAX_NODES=8 
+MACHINE_TYPE=g2-standard-4 
+DISK_SIZE="100" 
+BUCKET_NAME=$PROJECT_ID-stable-diffusion
+BUCKET_LOCATION=$REGION
+KSA_ROLE=roles/storage.objectAdmin 
+KSA_NAME=k8s-sa 
 APP_SA_NAME=stable-diffusion-sa
 ```
 2. Build Docker image of SD.
@@ -93,43 +91,9 @@ kubectl apply -f hpa-1.yaml
 kubectl apply -f hpa-2.yaml
 ```
 7. Configure load balancer for cluster. \
-create external load balancer if needed.
+Create external load balancer.
 ```
 kubectl apply -f service-1-external-lb.yaml
 kubectl apply -f service-2-external-lb.yaml
 ```
 
-create internal load balancer if needed. \
-create subnet for proxy.
-```
-gcloud compute networks subnets create proxy-subnet \
-    --purpose=REGIONAL_MANAGED_PROXY \
-    --role=ACTIVE \
-    --region=$REGION \
-    --network=$NETWORK \
-    --range=10.1.2.0/23
-```
-create firewall rules. 
-```
-gcloud compute firewall-rules create fw-allow-health-check \
-    --network=$NETWORK \
-    --action=allow \
-    --direction=ingress \
-    --source-ranges=130.211.0.0/22,35.191.0.0/16 \
-    --rules=tcp
-
-CONTAINER_PORT=7860
-gcloud compute firewall-rules create proxy-connection \
-    --allow=TCP:$CONTAINER_PORT \
-    --source-ranges=10.1.2.0/23 \
-    --network=$NETWORK
-```
-apply service and ingress.
-```
-kubectl apply -f service-2-internal-lb.yaml
-kubectl apply -f internal-ingress-2.yaml
-```
-verify the ingress is created, need to wait few minutes.
-```
-kubectl get ingress
-```
