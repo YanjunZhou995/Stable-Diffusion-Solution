@@ -39,8 +39,6 @@ spec:
           mountPath: "/stable-diffusion-webui/models/Stable-diffusion" # pay attention
         ports:
           - containerPort: 7860
-      nodeSelector:
-        model: model1
       serviceAccountName: $k8s-sa # pay attention
       volumes:
       - name: gcs-fuse-csi-static
