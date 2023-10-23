@@ -41,7 +41,6 @@ spec:
           - containerPort: 7860
       nodeSelector:
         instance-type: ondemand
-        model: model2
       serviceAccountName: $k8s-sa # pay attention
       volumes:
       - name: gcs-fuse-csi-static
