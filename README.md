@@ -30,7 +30,7 @@ build container image of sd webui, with Cloud Build
 cd ./docker
 gcloud builds submit --machine-type=e2-highcpu-32 --disk-size=100 --region=${REGION} -t ${REGION}-docker.pkg.dev/${PROJECT_ID}/${BUILD_REGIST}/sd-webui:inference 
 ```
-3. Run deploy.sh, manually running is recommended for customizing your parameters and verifying each step.  
+3. Run deploy.sh  
 4. Upload model files to GCS bucket in folder "model2". If you use another folder name, remember to modify the "- only-dir" in gcs-pv.yaml
 ```
   mountOptions:
