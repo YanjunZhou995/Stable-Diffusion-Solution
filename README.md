@@ -79,7 +79,7 @@ gcloud projects add-iam-policy-binding \
     --role="roles/monitoring.viewer"
 
 gcloud iam service-accounts add-iam-policy-binding --role  roles/iam.workloadIdentityUser \
---member "serviceAccount:$PROJECT_ID.svc.id.goog[custom-metrics/custom-metrics-stackdriver-adapter]" $APP_SA_NAME@$PROJECT_ID.iam.gserviceaccount.com
+--member "serviceAccount:$PROJECT_ID.svc.id.goog[custom-metrics/custom-metrics-stackdriver-adapter]" $APP_SA_NAME@$PROJECT_ID.iam.gserviceaccount.com --project=$PROJECT_ID
 
 kubectl annotate serviceaccount --namespace custom-metrics \
   custom-metrics-stackdriver-adapter \
