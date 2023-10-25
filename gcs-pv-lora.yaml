@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: gcs-fuse-csi-pv-lora
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 20Gi # can be customized
+  storageClassName: example-storage-class
+  claimRef:
+    namespace: default
+    name: gcs-fuse-csi-static-pvc-lora
+  mountOptions:
+    - implicit-dirs
+    - only-dir=lora # pay attention
+  csi:
+    driver: gcsfuse.csi.storage.gke.io
+    volumeHandle: aiqi-aigc-stable-diffusion # must be changed
