@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sd15-deployment-lora-static
+  labels:
+    app: stable-diffusion-sd15
+    model: model-lora
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stable-diffusion-sd15
+      model: model-lora
+  template:
+    metadata:
+      labels:
+        app: stable-diffusion-sd15
+        model: model-lora
+      annotations:
+        gke-gcsfuse/volumes: "true"
+        gke-gcsfuse/cpu-limit: 500m
+        gke-gcsfuse/memory-limit: 100Mi
+        gke-gcsfuse/ephemeral-storage-limit: 10Gi
+    spec:
+      containers:
+      - name: stable-diffusion-webui
+        image: us-central1-docker.pkg.dev/aiqi-aigc/sd-repo-test-001/sd-webui:inference
+        resources:
+          limits:
+            cpu: 2500m
+            memory: 12Gi
+            nvidia.com/gpu: "1"
+          requests:
+            cpu: 2500m
+            memory: 11Gi
+            nvidia.com/gpu: "1"
+        volumeMounts:
+        - name: gcs-fuse-csi-static
+          mountPath: "/stable-diffusion-webui/models/Stable-diffusion" # pay attention
+        - name: gcs-fuse-lora
+          mountPath: "/stable-diffusion-webui/models/LoRA" # pay attention
+        ports:
+          - containerPort: 7860
+      nodeSelector:
+        instance-type: ondemand
+      serviceAccountName: k8s-sa # pay attention
+      volumes:
+      - name: gcs-fuse-csi-static
+        persistentVolumeClaim:
+          claimName: gcs-fuse-csi-static-pvc-2
+      - name: gcs-fuse-lora
+        persistentVolumeClaim:
+          claimName: gcs-fuse-csi-static-pvc-lora        
+
+
