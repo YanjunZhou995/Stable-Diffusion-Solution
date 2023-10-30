@@ -91,50 +91,9 @@ kubectl apply -f hpa-1.yaml
 kubectl apply -f hpa-2.yaml
 ```
 
-7. Create external load balancer and configure security policies for external load balancer. 
-
-(1) Create a Google Cloud Armor policy. In this example, we create a Cloud Armor policy allow-my-ip that only allow one specific IP(34.83.21.159), and block all other traffics with 404 responses.
-```
-gcloud compute security-policies create allow-my-ip \
-    --description "policy for external users"
-
-gcloud compute security-policies rules update 2147483647 \
-    --security-policy allow-my-ip \
-    --action "deny-404"
-
-gcloud compute security-policies rules create 1000 \
-    --security-policy allow-my-ip \
-    --description "allow traffic from 34.83.21.159" \
-    --src-ip-ranges "34.83.21.159" \
-    --action "allow"
-```
-
-(2) Enable HTTP Load Balancing for cluster.
-```
-gcloud beta container clusters update stable-diffusion-cluster --update-addons=HttpLoadBalancing=ENABLED --region=us-central1
-```
-(3) Create BackendConfig in a kube-system namespace. 
-```
-cat << EOF | kubectl apply -f - -n kube-system
-apiVersion: cloud.google.com/v1
-kind: BackendConfig
-metadata:
-  name: cloudarmor-test
-spec:
-  securityPolicy:
-    name: allow-my-ip
-EOF
-```
-
-(4) Apply cloudarmor-ingress.yaml file
-```
-$ kubectl apply -f cloudarmor-ingress.yaml
-```
-(5) Wait until all created objects reach desired state
-```
-kubectl describe ingress
-```
-
-(6) Verify the policy is acting as expected by sending traffic to our Ingress VIP. 
+7. Configure load balancer for cluster.
+Create external load balancer.
+kubectl apply -f service-1-external-lb.yaml
+kubectl apply -f service-2-external-lb.yaml
 
 
