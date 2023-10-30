@@ -93,7 +93,8 @@ kubectl apply -f hpa-2.yaml
 
 7. Configure load balancer for cluster.
 Create external load balancer.
+```
 kubectl apply -f service-1-external-lb.yaml
 kubectl apply -f service-2-external-lb.yaml
-
+```
 
