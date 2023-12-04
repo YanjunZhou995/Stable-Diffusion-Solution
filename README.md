@@ -1,7 +1,7 @@
 # Stable-Diffusion-Solution
-<img width="2550" alt="image" src="https://github.com/YanjunZhou995/Stable-Diffusion-Solution/assets/87971537/2de784c3-f6e7-4c23-aed7-6c4580c2e2fa">
-<img width="2552" alt="image" src="https://github.com/YanjunZhou995/Stable-Diffusion-Solution/assets/87971537/26e0a55e-5261-4970-ac90-75ae674623f1">
-
+<img width="1496" alt="image" src="https://github.com/YanjunZhou995/Stable-Diffusion-Solution/assets/87971537/c75c0715-7c49-4ef2-b11d-234b1892c48b">
+<img width="1500" alt="image" src="https://github.com/YanjunZhou995/Stable-Diffusion-Solution/assets/87971537/a0c32d0c-ea90-4737-9518-4fbe1e6d1ae2">
+<img width="1496" alt="image" src="https://github.com/YanjunZhou995/Stable-Diffusion-Solution/assets/87971537/1f5009dd-73bd-483c-b472-3722f6581699">
 
 1. Modify parameters in deploy.sh
 ```
